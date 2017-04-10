@@ -1,19 +1,19 @@
 var express = require('express');
 
-// var allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', "*");
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
-// };
-
 // Create app
 var app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] === 'http') {
+    next();
+  } else {
+    res.redirect('http://' + req.hostname + req.url);
+  }
+});
 
 app.use(express.static('public'));
 
-//app.use(allowCrossDomain);
-
-app.listen(3000, function() {
-  console.log('all is working');
+app.listen(PORT, function() {
+  console.log('all is working on port ' + PORT);
 });
